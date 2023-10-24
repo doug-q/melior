@@ -1,4 +1,5 @@
 mod attribute;
+#[cfg(feature = "tblgen")]
 mod dialect;
 mod operation;
 mod parse;
@@ -6,6 +7,7 @@ mod pass;
 mod r#type;
 mod utility;
 
+#[cfg(feature = "tblgen")]
 use dialect::DialectInput;
 use parse::{DialectOperationSet, IdentifierList};
 use proc_macro::TokenStream;
@@ -23,6 +25,7 @@ use syn::parse_macro_input;
 ///     tablegen: r#"include "mlir/Dialect/Func/IR/FuncOps.td""#
 /// }
 /// ```
+#[cfg(feature = "tblgen")]
 #[proc_macro]
 pub fn dialect(input: TokenStream) -> TokenStream {
     let input = parse_macro_input!(input as DialectInput);

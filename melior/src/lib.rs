@@ -24,6 +24,7 @@ pub use self::{
     string_ref::StringRef,
 };
 
+#[cfg(feature = "ods-dialects")]
 pub use melior_macro::dialect;
 
 #[cfg(test)]

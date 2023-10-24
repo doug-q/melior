@@ -12,6 +12,10 @@ keywords = ["mlir", "llvm"]
 [lib]
 proc-macro = true
 
+[features]
+tblgen = ["dep:tblgen"]
+default-features = []
+
 [dependencies]
 comrak = "0.18.0"
 convert_case = "0.6.0"
@@ -20,7 +24,7 @@ proc-macro2 = "1"
 quote = "1"
 regex = "1.9.5"
 syn = { version = "2", features = ["full"] }
-tblgen = { version = "0.3.0", features = ["llvm18-0"], default-features = false }
+tblgen = { version = "0.3.0", features = ["llvm18-0"], default-features = false, optional = true }
 unindent = "0.2.2"
 
 [dev-dependencies]

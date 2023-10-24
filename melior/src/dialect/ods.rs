@@ -11,10 +11,10 @@ melior_macro::dialect! {
     name: "affine",
     tablegen: r#"include "mlir/Dialect/Affine/IR/AffineOps.td""#
 }
-melior_macro::dialect! {
-    name: "amdgpu",
-    tablegen: r#"include "mlir/Dialect/AMDGPU/AMDGPU.td""#
-}
+// melior_macro::dialect! {
+//     name: "amdgpu",
+//     tablegen: r#"include "mlir/Dialect/AMDGPU/AMDGPU.td""#
+// }
 melior_macro::dialect! {
     name: "arith",
     tablegen: r#"include "mlir/Dialect/Arith/IR/ArithOps.td""#
