@@ -42,6 +42,10 @@ impl<'a> StringRef<'a> {
         self.raw
     }
 
+    pub const fn as_bytes(&self) -> &[u8] {
+        unsafe {std::slice::from_raw_parts(self.raw.data as *const u8,self.raw.length) }
+    }
+
     /// Creates a string reference from a raw object.
     ///
     /// # Safety

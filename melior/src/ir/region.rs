@@ -62,7 +62,7 @@ impl<'c> Region<'c> {
     }
 
     /// Appends a block.
-    pub fn append_block(&self, block: Block<'c>) -> BlockRef<'c, '_> {
+    pub fn append_block<'a>(&'a self, block: Block<'c>) -> BlockRef<'c, 'a> {
         unsafe {
             let r#ref = BlockRef::from_raw(block.to_raw());
 
@@ -79,6 +79,11 @@ impl<'c> Region<'c> {
         forget(self);
 
         region
+    }
+
+    /// Converts a region reference into a raw object.
+    pub fn to_raw(&self) -> mlir_sys::MlirRegion {
+        self.raw
     }
 }
 
@@ -133,6 +138,23 @@ impl<'c, 'a> RegionRef<'c, 'a> {
         } else {
             Some(Self::from_raw(raw))
         }
+    }
+
+
+    /// Gets a region.
+    ///
+    /// This function is different from `deref` because the correct lifetime is
+    /// kept for the return type.
+    ///
+    /// # Safety
+    ///
+    /// The returned reference is safe to use only in the lifetime scope of the
+    /// region reference.
+    pub unsafe fn to_ref(&self) -> &'a Region<'c> {
+        // As we can't deref RegionRef<'a> into `&'a Region`, we forcibly cast its
+        // lifetime here to extend it from the lifetime of `ObjectRef<'a>` itself into
+        // `'a`.
+        transmute(self)
     }
 }
 

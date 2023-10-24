@@ -82,6 +82,12 @@ impl<'c> Module<'c> {
     pub const fn to_raw(&self) -> MlirModule {
         self.raw
     }
+
+    pub const fn into_raw(self) -> MlirModule {
+        let x = self.raw;
+        std::mem::forget(self);
+        x
+    }
 }
 
 impl<'c> Drop for Module<'c> {

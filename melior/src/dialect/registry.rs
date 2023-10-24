@@ -18,6 +18,15 @@ impl DialectRegistry {
     pub const fn to_raw(&self) -> MlirDialectRegistry {
         self.raw
     }
+
+    /// Creates a dialect from a raw object.
+    ///
+    /// # Safety
+    ///
+    /// A raw object must be valid.
+    pub unsafe fn from_raw(raw: MlirDialectRegistry) -> Self {
+        Self { raw }
+    }
 }
 
 impl Drop for DialectRegistry {

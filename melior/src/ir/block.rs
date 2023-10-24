@@ -72,7 +72,7 @@ impl<'c> Block<'c> {
     }
 
     /// Gets the first operation.
-    pub fn first_operation(&self) -> Option<OperationRef> {
+    pub fn first_operation(&self) -> Option<OperationRef<'c,'_>> {
         unsafe {
             let operation = mlirBlockGetFirstOperation(self.raw);
 
@@ -85,7 +85,7 @@ impl<'c> Block<'c> {
     }
 
     /// Gets a terminator operation.
-    pub fn terminator(&self) -> Option<OperationRef> {
+    pub fn terminator(&self) -> Option<OperationRef<'c,'_>> {
         unsafe { OperationRef::from_option_raw(mlirBlockGetTerminator(self.raw)) }
     }
 
@@ -288,6 +288,22 @@ impl<'c, 'a> BlockRef<'c, 'a> {
         } else {
             Some(Self::from_raw(raw))
         }
+    }
+
+    /// Gets a block.
+    ///
+    /// This function is different from `deref` because the correct lifetime is
+    /// kept for the return type.
+    ///
+    /// # Safety
+    ///
+    /// The returned reference is safe to use only in the lifetime scope of the
+    /// block reference.
+    pub unsafe fn to_ref(&self) -> &'a Block<'c> {
+        // As we can't deref RegionRef<'a> into `&'a Region`, we forcibly cast its
+        // lifetime here to extend it from the lifetime of `ObjectRef<'a>` itself into
+        // `'a`.
+        transmute(self)
     }
 }
 
