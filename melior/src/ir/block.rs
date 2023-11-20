@@ -72,7 +72,7 @@ impl<'c> Block<'c> {
     }
 
     /// Gets the first operation.
-    pub fn first_operation(&self) -> Option<OperationRef<'c,'_>> {
+    pub fn first_operation<'a>(&'a self) -> Option<OperationRef<'c,'a>> {
         unsafe {
             let operation = mlirBlockGetFirstOperation(self.raw);
 

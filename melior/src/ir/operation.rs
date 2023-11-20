@@ -7,7 +7,7 @@ mod result;
 pub use self::{
     builder::OperationBuilder, printing_flags::OperationPrintingFlags, result::OperationResult,
 };
-use super::{Attribute, AttributeLike, BlockRef, Identifier, RegionRef, Value};
+use super::{Attribute, AttributeLike, BlockRef, Identifier, RegionRef, Value, Location};
 use crate::{
     context::{Context, ContextRef},
     utility::{print_callback, print_string_callback},
@@ -21,7 +21,7 @@ use mlir_sys::{
     mlirOperationClone, mlirOperationDestroy, mlirOperationDump, mlirOperationEqual,
     mlirOperationGetAttribute, mlirOperationGetAttributeByName, mlirOperationGetBlock,
     mlirOperationGetContext, mlirOperationGetName, mlirOperationGetNextInBlock,
-    mlirOperationGetNumAttributes, mlirOperationGetNumOperands, mlirOperationGetNumRegions,
+    mlirOperationGetNumAttributes, mlirOperationGetNumOperands, mlirOperationGetLocation, mlirOperationGetNumRegions,
     mlirOperationGetNumResults, mlirOperationGetNumSuccessors, mlirOperationGetOperand,
     mlirOperationGetRegion, mlirOperationGetResult, mlirOperationGetSuccessor, mlirOperationPrint,
     mlirOperationPrintWithFlags, mlirOperationRemoveAttributeByName,
@@ -49,6 +49,11 @@ impl<'c> Operation<'c> {
     /// Gets a name.
     pub fn name(&self) -> Identifier<'c> {
         unsafe { Identifier::from_raw(mlirOperationGetName(self.raw)) }
+    }
+
+    /// Gets location
+    pub fn loc(&self) -> Location<'c> {
+        unsafe { Location::from_raw(mlirOperationGetLocation(self.raw)) }
     }
 
     /// Gets a block.
@@ -218,7 +223,7 @@ impl<'c> Operation<'c> {
     }
 
     /// Gets the next operation in the same block.
-    pub fn next_in_block(&self) -> Option<OperationRef<'c, '_>> {
+    pub fn next_in_block<'a>(&'a self) -> Option<OperationRef<'c, 'a>> {
         unsafe {
             let operation = mlirOperationGetNextInBlock(self.raw);
 
