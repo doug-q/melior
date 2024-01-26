@@ -17,7 +17,7 @@ pub struct Identifier<'c> {
 
 impl<'c> Identifier<'c> {
     /// Creates an identifier.
-    pub fn new(context: &Context, name: &str) -> Self {
+    pub fn new(context: &'c Context, name: &'c str) -> Self {
         unsafe {
             Self::from_raw(mlirIdentifierGet(
                 context.to_raw(),

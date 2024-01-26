@@ -162,6 +162,10 @@ impl<'c> ContextRef<'c> {
         transmute(self)
     }
 
+    pub fn to_ref2<'a>(&'a self) -> &'a &'c Context {
+        unsafe { transmute(self) }
+    }
+
     /// Creates a context reference from a raw object.
     ///
     /// # Safety
